@@ -4,7 +4,7 @@ This code pertains to our paper:
 
 https://ieeexplore.ieee.org/document/9136769
 
-S. El Kababji and P. Srikantha, "A Data-Driven Approach for Generating Synthetic Load Patterns and Usage Habits," 
+**S. El Kababji and P. Srikantha, "A Data-Driven Approach for Generating Synthetic Load Patterns and Usage Habits," 
 in IEEE Transactions on Smart Grid, doi: 10.1109/TSG.2020.3007984.
 
 Please cite our above-referenced paper if you are using any part of our code.
