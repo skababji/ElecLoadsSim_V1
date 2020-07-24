@@ -101,7 +101,8 @@ it should have the same name in all other available datasets
 
 ## Usage
 <ol>
-<li>Add all libraries as per requirements below preferably in new environment.</li>
+<li>Add all libraries as per requirements below preferably in new environment. If you have anaconda installed, you may simply run:
+conda env create -f proj_env.yml</li>
 
 <li>Clone repo. You should get the following subfolders:
 
