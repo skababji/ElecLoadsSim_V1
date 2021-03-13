@@ -4,8 +4,8 @@ This code pertains to our paper:
 
 https://ieeexplore.ieee.org/document/9136769
 
-S. El Kababji and P. Srikantha, "A Data-Driven Approach for Generating Synthetic Load Patterns and Usage Habits," 
-in IEEE Transactions on Smart Grid, doi: 10.1109/TSG.2020.3007984.
+__S. El Kababji and P. Srikantha, "A Data-Driven Approach for Generating Synthetic Load Patterns and Usage Habits," 
+in IEEE Transactions on Smart Grid, doi: 10.1109/TSG.2020.3007984.__
 
 Please cite our above-referenced paper if you are using any part of our code.
 
@@ -101,7 +101,8 @@ it should have the same name in all other available datasets
 
 ## Usage
 <ol>
-<li>Add all libraries as per requirements below preferably in new environment.</li>
+<li>Add all libraries as per requirements below preferably in new environment. If you have anaconda installed, you may simply run:
+conda env create -f proj_env.yml</li>
 
 <li>Clone repo. You should get the following subfolders:
 
