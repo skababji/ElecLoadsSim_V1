@@ -117,7 +117,7 @@ If you are missing any of the last three folders, please add it manually.</li>
 
 <li>Go to url below and  extract zipped file to raw_input folder above:
 
-https://drive.google.com/drive/folders/15cWmM5BLf1v9a0AEIOddGq6vN1yhUBJX?usp=sharing
+https://drive.google.com/file/d/1BAxsCIk-Pn_ThmtgfISJ_v9xWlrFH3cr/view?usp=sharing
 
 You should be able to see two .csv files that contain power measurements for various appliances. The two datasets differ
 in the sampling rates. The third .xml file defines the metadata of both raw power measurements datasets. It is 
