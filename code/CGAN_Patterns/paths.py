@@ -8,15 +8,15 @@ class Paths():
 
     def __init__(self, key):
 
-        self.raw_input_path= "../raw_input/"
+        self.raw_input_path= "raw_input/"
 
 
-        self.training_runs_path="../training_runs/"
+        self.training_runs_path="training_runs/"
 
 
-        self.synth_patterns_path="../synth_output/patterns/"
-        self.synth_habits_path = "../synth_output/habits/"
-        self.synth_aggreg_path = "../synth_output/aggregate/"
+        self.synth_patterns_path="synth_output/patterns/"
+        self.synth_habits_path = "synth_output/habits/"
+        self.synth_aggreg_path = "synth_output/aggregate/"
 
         self.currentDT = datetime.datetime.now()
         currentDT=self.currentDT

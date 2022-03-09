@@ -13,13 +13,13 @@ class Paths():
         self.currentDT=currentDT
         self.trial=trial
 
-        self.raw_input_path = "../raw_input/"
+        self.raw_input_path = "raw_input/"
 
-        self.training_runs_path = "../training_runs/"
+        self.training_runs_path = "training_runs/"
 
-        self.code_path = "../code/"
+        self.code_path = "code/"
 
-        self.synth_habits_path = "../synth_output/habits/"
+        self.synth_habits_path = "synth_output/habits/"
 
         if key == 'train':
             if not os.path.exists(self.training_runs_path + trial):
