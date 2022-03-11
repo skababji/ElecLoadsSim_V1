@@ -6,6 +6,8 @@ from scipy.stats import ks_2samp
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from glob import glob
+import os
+
 
 import tensorflow as tf
 
@@ -70,6 +72,9 @@ preprocessor=Preprocessor(input_path+'filtered_patterns.csv')
 cgan_tf = Cgan_tf(paths, preprocessor)
 
 
+# copy ampd_runs_per_week.csv file from training folder to inference folder
+source=pd.read_csv(os.path.join(os.getcwd(),input_path,'ampd_runs_per_week.csv'))
+source.to_csv(os.path.join(os.getcwd(),paths.current_path, 'ampd_runs_per_week.csv'), index=False)
 
 
 

@@ -127,11 +127,7 @@ e.g. appliances includes, sampling rates..etc.  The data in the link above is ju
 from http://ampds.org/. Typically, you should upload your own data and define your data.xml accordingly.
 Please refer to 'Input Datasets' above for further details. `</li>`
 
-<li>Open the folder 'code' as new project using your Python IDE (e.g. PyCharm) and select the environment you created
- in 1 above. Note: If you open the parent folder of 'code' as your project, your IDE is likely to fail importing 
- files. </li>
-
-<li> Go to CGAN_Patterns-> hyperparam.py and adjust your Hyper Parameters if needed. You can do the
+<li> Open the project in your IDE (e.g. VS Code)and go to CGAN_Patterns-> hyperparam.py and adjust your Hyper Parameters if needed. You can do the
  same thing for Habits by going to CGAN-Habits-> hyperparam.py.</li>
 
 <li>Go to main.py. You have four options:
@@ -151,7 +147,7 @@ to generate patterns or habits unless you already trained some models.
 
 *Note3: When prompted to enter a folder, please enter folder name without the full path, e.g. P_RESP_2022391341. To keep track of experiments, the folders are time stamped.*
 
-*Note4: Random seed is Not set for this code and as such, even with the same hyperparmaters, different runs will result in different synthetic patterns and habits.*
+*Note4: If you want repetitive runs to result in different synthetic patterns and habits, you need to comment out random seed in train_patterns.*
 
 </li>
 </ol>

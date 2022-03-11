@@ -1,5 +1,5 @@
 import numpy as np
-
+import pandas as pd
 
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
@@ -45,11 +45,25 @@ plotter = Plotter(paths)
 documenter.record_plotter(datasets)
 
 
-examples=[]
+examples=[] # A list of dataframes where the first dataframe correspondeds to the gathered examples from dataset 1 and the second dataframe corresponds to the seconds and so forth..
+
+
 
 for i in range(datasets.n_datasets):
     this_examples = datasets.make_examples(datasets.datasets[i].get('data_name'), power_resampled[i], datasets.tmplt_lookup_df[i], documenter)
     examples.append(this_examples)
+
+def ampd_runs_per_week(load_name): # A function returns the number of runs detected for a given load in A<Pd dataset and returns average runs per week for that load. This is used for final aggregation purposes
+    this_load_examples=examples[0][examples[0]['name']==load_name]
+    no_runs=len(this_load_examples)
+    weeks=(this_load_examples['starttime'].max()-this_load_examples['starttime'].min())/60/60/24/7
+    runs_per_week=no_runs/weeks
+    return runs_per_week
+
+ampd_load_names=examples[0].drop_duplicates(subset='name')['name'].values
+ampd_load_runs_per_week=np.array([ampd_runs_per_week(x) for x in ampd_load_names])
+ampd_runs_per_week=pd.DataFrame(ampd_load_runs_per_week.reshape(1,-1), columns=ampd_load_names)
+ampd_runs_per_week.to_csv(paths.current_path + 'ampd_runs_per_week.csv', index=False)
 
 df_filtered = datasets.combine_examples(examples)
 documenter.record_input("Total Training Examples: {0} \n".format(str(df_filtered.shape[0])))
