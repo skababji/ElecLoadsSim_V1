@@ -17,11 +17,12 @@ if not os.path.exists("synth_output/aggregate/"+trial):
 output_dir="synth_output/aggregate/"+trial
 
 print('Enter the name of the folder (not full path) that contains synth_patterns.csv:')
-patterns_input_folder = 'P_RESP_20223101356'# input()
+patterns_input_folder = input() #'P_RESP_20223101356'
 print('Enter the name of the folder (not full path) that contains synth_habbits.csv:')
-habits_input_folder = 'H_2022391411' #input()
-print('Enter simulation quarter (1,2,3 or4)')
-sim_qtr=1 #input()
+habits_input_folder =input() #'H_2022391411' 
+print('Enter simulation quarter (1,2,3 or 4)')
+sim_qtr=int(input())
+assert 1<=sim_qtr<=4
 sim_time=13 # each quarter is 13 weeks
 
 
@@ -80,60 +81,57 @@ for i in range(len(loadslist)):
 no_drawn_samples=no_drawn_samples.values.ravel()
 
 #sample habits for simulation
-sampled_habits=[picked_habits[i].sample(n=no_drawn_samples[i],random_state=24) for i in range(len(loadslist))]
-sampled_patterns=[loads_patterns[i].sample(n=no_drawn_samples[i],random_state=24) for i in range(len(loadslist))]
+
+sampled_habits=[]
+sampled_patterns=[]
+for i in range(len(loadslist)):
+    no_samples=no_drawn_samples[i] if no_drawn_samples[i]<len(picked_habits[i]) else len(picked_habits[i])
+    sampled_habits.append(picked_habits[i].sample(n=no_samples)) # You need to set random_state for repetitive outcome
+    sampled_patterns.append(loads_patterns[i].sample(n=no_samples))
+
 
 
 #combine patterns and habits
 
-def get_load_power(patterns,habits):
+def get_load_power(patterns,habits,qtr):
     event_time=habits[:,0]*7*24*60+habits[:,1]*24*60+habits[:,2]*60#Get time in minute when a cycle ends
     load_power=np.zeros(13*7*24*60) #load values across the quarter
+    load_power=load_power[::3] #downsample by unified sampling rate
+    if qtr==1:
+        offset=0
+    elif qtr==2:
+        offset=-13*7*24*60
+    elif qtr==3:
+        offset=-2*13*7*24*60
+    else:
+        offset=-3*13*7*24*60
     for i,event in enumerate(event_time):
-        load_power[event-len(patterns[i]):event]=patterns[i] #pattern is projected ahead of event_time 
+        if (int((event+offset)/3)-len(patterns[i]))<0: continue
+        load_power[int((event+offset)/3)-len(patterns[i]):int((event+offset)/3)]=patterns[i] #pattern is projected ahead of event_time 
     return load_power
 
-power=[get_load_power(sampled_patterns[i].iloc[:,2:].values,sampled_habits[i].iloc[:,2:].values) for i in range(len(loadslist))]
+power=[]
+for i in range(len(loadslist)):
+    power.append(get_load_power(sampled_patterns[i].iloc[:,2:].values,sampled_habits[i].iloc[:,2:].values,sim_qtr))
+
+
+# power=[get_load_power(sampled_patterns[i].iloc[:,2:].values,sampled_habits[i].iloc[:,2:].values) for i in range(len(loadslist))]
 
 power=pd.DataFrame(power).T
 power.columns=loadslist
 power['AGG']=power.sum(axis=1)
-power.to_csv(output_dir+'/agg_data.csv', index=False)
+power.to_csv(output_dir+'/agg_data_Q{}.csv'.format(sim_qtr), index=False)
 
 
 
-# plt.figure()
-# plt.plot(indv_loads['time'],indv_loads['AGG'])
-# plt.legend()
-# plt.xlabel('min')
-# plt.ylabel('Power (W)')
-# plt.title('Synthesized Aggregated Load')
-
-# plt.figure()
-# #plt.plot(indv_loads['time'],indv_loads['AGG'])
-# for idx,load in enumerate(loadslist):
-#     plt.plot(indv_loads['time'],indv_loads[load],label=load)
-# plt.legend()
-# plt.xlabel('min')
-# plt.ylabel('Power (W)')
-# plt.title('Synthesized Indivisual Loads')
-
-
-# plt.figure()
-# for idx,load in enumerate(loadslist):
-#     plt.subplot(5,2,idx+1)
-#     plt.plot(indv_loads['time'],indv_loads[load],label=load)
-#     plt.legend()
-
-
-# from matplotlib.backends.backend_pdf import PdfPages
-
-# def multipage(filename, figs=None, dpi=200):
-#     pp = PdfPages(filename)
-#     if figs is None:
-#         figs = [plt.figure(n) for n in plt.get_fignums()]
-#     for fig in figs:
-#         fig.savefig(pp, format='pdf')
-#     pp.close()
-
-# multipage(output_dir+'/synth_figures.pdf')
+plt.style.use('seaborn-whitegrid')
+plt.rcParams["figure.figsize"] = (8,4)
+fig, ax=plt.subplots(nrows=1,ncols=1)
+for load in loadslist:
+    ax.plot(power[load].values[::3], label=load)
+ax.legend(title='Load')
+ax.set_xlabel('Time step (3 mins)')
+ax.set_ylabel('Power (Watts)')
+ax.set_title('Simulation for Q{}'.format(sim_qtr))  
+plt.savefig(output_dir+'/sim_loads_Q{}.png'.format(sim_qtr)) 
+plt.show()
